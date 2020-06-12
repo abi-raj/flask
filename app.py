@@ -26,8 +26,18 @@ def getbooklinks(srch_url):
     l=[]
     a=0
     for i in bcont.find_all('tr'):
-       l.append(i)
-    return str(l)
+       if a==0 or a==1 or a==2:
+           a=a+1
+        
+        else:
+            b=0
+            for g in i.find_all('td'):
+                if b==1:
+                    c={}
+                    arthr=g.text
+                    c['authr']=arthr
+
+    return c
 
         
 if __name__ == '__main__':
