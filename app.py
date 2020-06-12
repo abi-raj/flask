@@ -7,67 +7,9 @@ import requests
 app = Flask(__name__)
 
 def getbooklinks(srch_url):
-    cont=requests.get(str(srch_url)).content
-    l=[]
-    pcont=bs(cont,'html.parser')
-    a=0
-    for i in pcont.find_all('tr'):
-        if a==0 or a==1 or a==2 :
-            a=a+1
-            pass
-        else:
-            b=0
-            for g in i.find_all('td'):
-                #1st 'td' has the ARTHOR
-                if b==1:
-                    arthr=g.text
-                #2nd 'td' has the BOOK TITLE
-                if b==2:
-                    btitl=g.text
-                    btitle="".join(filter(lambda x: not x.isdigit(), btitl))
-                    btitle=btitle.replace(",","")
-                    btitle=btitle.replace("-"," ")
-                    btitle=btitle.replace("  ","")
-                    
-                if b==3:
-                    bpub=g.text
-                    if len(bpub)==0:
-                        bpub='NA'
-                if b==4:
-                    byear=g.text
-                if b==5:
-                    bpages=g.text
-                if b==6:
-                    blan=g.text
-                if b==7:
-                    bsize=g.text
-                if b==8:
-                    bformat=g.text
-                #9th 'td' has the LINK
-                if b==9:
-                    for h in g.find_all('a',href=True):
-                        c={}
-                        c['index']=len(l)
-                        c['Arthor']=arthr
-                        c['link']=h['href']
-                        c['Title']=btitle
-                        c['Publisher']=bpub
-                        c['Year']=byear
-                        c['Total Pages']=bpages
-                        c['Language']=blan
-                        c['Size']=bsize
-                        c['Format']=bformat
-                        #print(c)
-                        l.append(c)
-                        
-                    b=b+1
-                else:
-                    b=b+1
-                    pass
-    return jsonify(l)          
+   return srch_url 
 
 @app.route('/api',methods=['GET'])
-
 def api():
     url="http://gen.lib.rus.ec/"
     query = str(request.args['query'])
