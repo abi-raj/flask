@@ -76,7 +76,9 @@ def getbooklinks(srch_url):
                 else:
                     b=b+1
                     pass
-    return str(l)   
+    data={}
+    data['data']=l
+    return jsonify(data)   
 
 if __name__ == "__main__":
     app.run()
