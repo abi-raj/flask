@@ -7,15 +7,15 @@ import requests
 app = Flask(__name__)
 
 def getbooklinks(srch_url):
-   return srch_url 
+   return str(srch_url) 
 
 @app.route('/api',methods=['GET'])
 def api():
     url="http://gen.lib.rus.ec/"
     query = str(request.args['query'])
-    if " " in qgiven:
+    if " " in query:
         query = str(query).replace(" ","+")
-    else:
+    else: 
         pass
     srch="search.php?req="+query+"&lg_topic=libgen&open=0&view=simple&res=100&phrase=1&column=def"
     srch_url=url+srch
