@@ -33,11 +33,11 @@ def getbooklinks(srch_url):
             b=0
             for g in i.find_all('td'):
                 if b==1:
-                    c={}
+                    
                     arthr=g.text
-                    c['authr']=arthr
+                    l.append(arthr)
 
-    return c
+    return str(l)
 
         
 if __name__ == '__main__':
