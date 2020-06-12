@@ -27,7 +27,7 @@ def getbooklinks(srch_url):
     a=0
     for i in bcont.find_all('tr'):
        l.append(i)
-    return l
+    return str(l)
 
         
 if __name__ == '__main__':
