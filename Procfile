@@ -1,1 +1,1 @@
-web: gunicorn app:jsonifyin
+web: gunicorn app:app
