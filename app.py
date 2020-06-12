@@ -23,18 +23,11 @@ def api():
 def getbooklinks(srch_url):
     cont=requests.get(str(srch_url)).content
     bcont=bs(cont,'html.parser')
-    #l=[]
+    l=[]
     a=0
     for i in bcont.find_all('tr'):
-        if a==0 or a==1 or a==2:
-            a=a+1
-            pass
-        else:
-            b=0
-            for g in i.find_all('td'):
-                if b==1:
-                    arthr=g.text
-    return str(arthr)
+       l.append(i)
+    return l
 
         
 if __name__ == '__main__':
