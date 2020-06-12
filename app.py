@@ -29,7 +29,7 @@ def getbooklinks(srch_url):
        if a==0 or a==1 or a==2:
            a=a+1
         
-        else:
+       else:
             b=0
             for g in i.find_all('td'):
                 if b==1:
