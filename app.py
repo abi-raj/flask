@@ -20,7 +20,6 @@ def hello_world():
 def getbooklinks(srch_url):
     cont=rq.get(str(srch_url)).content
     l=[]
-    
     pcont=bs(cont,'html.parser')
     a=0
     for i in pcont.find_all('tr'):
@@ -77,7 +76,7 @@ def getbooklinks(srch_url):
                 else:
                     b=b+1
                     pass
-    return jsonify(l)   
+    return str(l)   
 
 if __name__ == "__main__":
     app.run()
