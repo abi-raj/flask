@@ -14,7 +14,6 @@ def hello_world():
     srch="search.php?req="+qgiven+"&lg_topic=libgen&open=0&view=simple&res=100&phrase=1&column=def"
     srch_url=url+srch
     return getbooklinks(srch_url)
-
 def getbooklinks(srch_url):
     cont=rq.get(str(srch_url)).content
     l=[]
