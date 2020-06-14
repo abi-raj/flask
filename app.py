@@ -52,7 +52,7 @@ def getbooklinks(srch_url):
                     blan=g.text
                 #if b==7:
                  #   bsize=g.text
-               # if b==8:
+                if b==8:
                     bformat=g.text
                 #9th 'td' has the LINK
                 if b==9:
