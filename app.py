@@ -61,7 +61,7 @@ def getbooklinks(srch_url):
                         c['Arthor']=arthr
                         c['link']=h['href']
                         dd=c['link']
-                        c['image']= img(dd)
+                        #c['image']= img(dd)
                         c['Title']=btitle
                         c['Publisher']=bpub
                         c['Year']=byear
