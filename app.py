@@ -14,6 +14,7 @@ def hello_world():
     srch="search.php?req="+qgiven+"&lg_topic=libgen&open=0&view=simple&res=100&phrase=1&column=def"
     srch_url=url+srch
     return getbooklinks(srch_url)
+    
 def getbooklinks(srch_url):
     cont=rq.get(str(srch_url)).content
     l=[]
@@ -59,6 +60,7 @@ def getbooklinks(srch_url):
                         c['index']=len(l)
                         c['Arthor']=arthr
                         c['link']=h['href']
+                        c['image']= img(c['link'])
                         c['Title']=btitle
                         c['Publisher']=bpub
                         c['Year']=byear
@@ -75,7 +77,18 @@ def getbooklinks(srch_url):
                     pass
     data={}
     data['data']=l
-    return jsonify(data)   
+    return jsonify(data)
+
+def img(link):
+    icnt=0
+    cont=rq.get(str(link)).content
+    bcont=bs(cont,'html.parser')
+    for i in bcont.find_all('div'):
+        if icnt == 0:
+            for j in i.find_all('img',src=True):
+                imgli="http://93.174.95.29"+j['src']
+            break
+    return imgli
 
 if __name__ == "__main__":
     app.run()
