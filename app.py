@@ -78,6 +78,7 @@ def getbooklinks(srch_url):
                 else:
                     b=b+1
                     pass
+
     data={}
     data['data']=l
     return jsonify(data)
