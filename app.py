@@ -73,7 +73,7 @@ def getbooklinks(srch_url):
                         c['Format']=bformat
                         #print(c)
                         l.append(c)
-                    print("total",count)    
+                    #print("total",count)    
                     b=b+1
                 else:
                     b=b+1
