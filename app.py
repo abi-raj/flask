@@ -20,6 +20,7 @@ def getbooklinks(srch_url):
     l=[]
     pcont=bs(cont,'html.parser')
     a=0
+    count=0
     for i in pcont.find_all('tr'):
         if a==0 or a==1 or a==2 :
             a=a+1
@@ -39,39 +40,40 @@ def getbooklinks(srch_url):
                     btitle=btitle.replace("  ","")
                    
                     
-                if b==3:
-                    bpub=g.text
-                    if len(bpub)==0:
-                        bpub='NA'
+                #if b==3:
+                  #  bpub=g.text
+                   # if len(bpub)==0:
+                 #       bpub='NA'
                 if b==4:
                     byear=g.text
-                if b==5:
-                    bpages=g.text
+               # if b==5:
+                 #   bpages=g.text
                 if b==6:
                     blan=g.text
-                if b==7:
-                    bsize=g.text
-                if b==8:
+                #if b==7:
+                 #   bsize=g.text
+               # if b==8:
                     bformat=g.text
                 #9th 'td' has the LINK
                 if b==9:
                     for h in g.find_all('a',href=True):
+                        count=count+1
                         c={}
                         c['index']=len(l)
                         c['Arthor']=arthr
                         c['link']=h['href']
-                        dd=c['link']
+                        #dd=c['link']
                         #c['image']= img(dd)
                         c['Title']=btitle
-                        c['Publisher']=bpub
+                        #c['Publisher']=bpub
                         c['Year']=byear
-                        c['Total Pages']=bpages
+                        #c['Total Pages']=bpages
                         c['Language']=blan
-                        c['Size']=bsize
+                        #c['Size']=bsize
                         c['Format']=bformat
                         #print(c)
                         l.append(c)
-                        
+                    print("total",count)    
                     b=b+1
                 else:
                     b=b+1
@@ -80,16 +82,16 @@ def getbooklinks(srch_url):
     data['data']=l
     return jsonify(data)
 
-def img(link):
-    icnt=0
-    cont=rq.get(str(link)).content
-    bcont=bs(cont,'html.parser')
-    for i in bcont.find_all('div'):
-        if icnt == 0:
-            for j in i.find_all('img',src=True):
-                imgli="http://93.174.95.29"+j['src']
-            break
-    return str(imgli)
+#def img(link):
+ #   icnt=0
+  #  cont=rq.get(str(link)).content
+   # bcont=bs(cont,'html.parser')
+   # for i in bcont.find_all('div'):
+    #    if icnt == 0:
+     #       for j in i.find_all('img',src=True):
+      #          imgli="http://93.174.95.29"+j['src']
+       #     break
+   # return str(imgli)
 
 
 if __name__ == "__main__":
