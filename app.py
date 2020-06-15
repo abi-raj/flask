@@ -38,7 +38,6 @@ def getbooklinks(srch_url):
                     btitle=btitle.replace(",","")
                     btitle=btitle.replace("-"," ")
                     btitle=btitle.replace("  ","")
-                   
                     
                 #if b==3:
                   #  bpub=g.text
