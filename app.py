@@ -111,11 +111,11 @@ def book():
                     fileLink['File']=abc['href']
                     fileLink['Image']=imgli
                     fileLink['ISBN']=isbn
-                    lis.append(fileLink)
+                    
             break
         b=b+1
     book={}
-    book["data"]=lis
+    book["data"]=fileLink
     return jsonify(book)
 
 if __name__ == "__main__":
