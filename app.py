@@ -61,8 +61,8 @@ def getbooklinks(srch_url):
                         c['index']=len(l)
                         c['Arthor']=arthr
                         c['link']=h['href']
-                        #dd=c['link']
-                        #c['image']= img(dd)
+                        dd=c['link']
+                        c['image']= img(dd)
                         c['Title']=btitle
                         #c['Publisher']=bpub
                         c['Year']=byear
@@ -82,16 +82,19 @@ def getbooklinks(srch_url):
     data['data']=l
     return jsonify(data)
 
-#def img(link):
- #   icnt=0
-  #  cont=rq.get(str(link)).content
-   # bcont=bs(cont,'html.parser')
-   # for i in bcont.find_all('div'):
-    #    if icnt == 0:
-     #       for j in i.find_all('img',src=True):
-      #          imgli="http://93.174.95.29"+j['src']
-       #     break
-   # return str(imgli)
+def img(link):
+    icnt=0
+    cont=rq.get(str(link)).content
+    bcont=bs(cont,'html.parser')
+    for i in bcont.find_all('div'):
+        
+        if icnt == 0:
+            
+            for j in i.find_all('img',src=True):
+                imgli="http://93.174.95.29"+j['src']
+                
+            break
+    return str(imgli)
 
 
 if __name__ == "__main__":
