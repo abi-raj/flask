@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup as bs
 import requests as rq
 app = Flask(__name__)
 
+
 @app.route('/api',methods=['GET'])
 def hello_world():
     url="http://gen.lib.rus.ec/"
