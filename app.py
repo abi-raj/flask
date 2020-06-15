@@ -11,7 +11,7 @@ def hello_world():
         qgiven = str(qgiven).replace(" ","+")
     else:
         pass
-    srch="search.php?req="+qgiven+"&lg_topic=libgen&open=0&view=simple&res=100&phrase=1&column=def"
+    srch="search.php?req="+qgiven+"&lg_topic=libgen&open=0&view=simple&res=25&phrase=1&column=def"
     srch_url=url+srch
     return getbooklinks(srch_url)
     
