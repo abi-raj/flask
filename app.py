@@ -13,8 +13,7 @@ def hello_world():
         pass
     srch="search.php?req="+qgiven+"&lg_topic=libgen&open=0&view=simple&res=25&phrase=1&column=def"
     srch_url=url+srch
-    return getbooklinks(srch_url)
-    
+    return getbooklinks(srch_url)    
 def getbooklinks(srch_url):
     cont=rq.get(str(srch_url)).content
     l=[]
