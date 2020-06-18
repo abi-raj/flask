@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 
 @app.route('/api',methods=['GET'])
-def hello_world():
+def libgen():
     url="http://gen.lib.rus.ec/"
     qgiven = str(request.args['query'])
     if " " in qgiven:
@@ -83,6 +83,7 @@ def getbooklinks(srch_url):
     return jsonify(data)
 
 @app.route('/book',methods=['GET'])
+
 def book():
     link = str(request.args['link'])
     lis=[]
@@ -117,6 +118,78 @@ def book():
     book={}
     book["data"]=fileLink
     return jsonify(book)
+
+#BookFi Sources
+@app.route('/bookfi/image',methods=['GET'])
+def getimage():
+    image={}
+    link=str(request.args['link'])
+    imgCont=rq.get("http://m.bookfi.net/"+ link).content
+    imgBscnt=bs(imgCont,'html.parser')
+    for img in imgBscnt.find_all('img') :
+        image['jpg']=img['src']
+    if len(image) ==0:
+        image['jpg']="https://cdn.bookauthority.org/dist/images/book-cover-not-available.6b5a104fa66be4eec4fd16aebd34fe04.png"
+    return jsonify(image)
+
+@app.route('/bookfi',methods=['GET'])
+def bookfi():
+    query=str(request.args['query'])
+    bookLink=[]
+    bookTitle=[]
+    bookArthur=[]
+    bookLanguage=[]
+    bookDownload=[]
+    
+    data=[]
+    
+    if " " in query:
+        query = str(query).replace(" ","+")
+    cont=rq.get("http://en.bookfi.net/s/?q="+query+"&t=0").content
+    bscnt=bs(cont,'html.parser')
+   
+    a=0
+
+    id=bscnt.find(id="searchResultBox")
+    for i in id.find_all('div',style="width:650px; float:left;"):
+        for ii in i.find_all('a',href=True):
+            #if a%5==0 :
+            if ii['href'].startswith("book"):
+                stringLink = "http://m.bookfi.net/" + ii["href"]
+                #print(stringLink)
+                bookLink.append(stringLink)
+            a=a+1
+
+    for j in bscnt.find_all('h3'):
+        #print(j.text)
+        bookTitle.append(j.text)
+        
+    for k in bscnt.find_all('a',target="_blank",href=True):
+        if k['href'].startswith("http://book"):
+            bookDownload.append(k['href'])
+
+    for l in bscnt.find_all('span',itemprop='inLanguage'):
+        #print(l.text)
+        bookLanguage.append(l.text)
+
+    for m in bscnt.find_all('a',itemprop="author"):
+        if m.text != "" and m.text != "img":
+            bookArthur.append(m.text)
+  
+    for c in range(90):
+        books={}
+        books['Title']=bookTitle[c]
+        books['Arthur']=bookArthur[c]
+        books['Language']=bookLanguage[c]
+        books['Link']=bookLink[c]
+        books['Download']=bookDownload[c]
+        data.append(books)
+            
+
+    bookFi={}
+    bookFi["books"]=data
+    return jsonify(bookFi)
+
 
 if __name__ == "__main__":
     app.run()
