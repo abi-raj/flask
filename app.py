@@ -190,6 +190,29 @@ def bookfi():
     bookFi["books"]=data
     return jsonify(bookFi)
 
+#Z-Library Popular
+@app.route('/zlib/popular')
+def popularImages():
+    popImage=[]
+    popLink=[]
+    jsonArray=[]
+    count=0
+    cont=rq.get("https://b-ok.asia/popular.php").content
+    bsc=bs(cont,'html.parser')
+    for i in bsc.find_all('img',src=True):
+        popImage.append(i['src'])  
+    for i in bsc.find_all('a',href=True):
+        if i['href'].startswith('/book/'):
+            popLink.append("https://b-ok.asia"+i['href'])
+    for index in range(len(popImage)):
+        popBooks={}
+        popBooks['images']=popImage[index]
+        popBooks['link']=popLink[index]
+        jsonArray.append(popBooks)
+    data={}
+    data['data']=jsonArray
+    return jsonify(data)
+
 
 if __name__ == "__main__":
     app.run()
