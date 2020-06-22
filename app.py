@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup as bs
 import requests as rq
 app = Flask(__name__)
 
-
+#LIBGEN
 @app.route('/api',methods=['GET'])
 def libgen():
     url="http://gen.lib.rus.ec/"
@@ -119,6 +119,7 @@ def book():
     book["data"]=fileLink
     return jsonify(book)
 
+
 #BookFi Sources
 @app.route('/bookfi/image',methods=['GET'])
 def getimage():
@@ -151,32 +152,59 @@ def bookfi():
     a=0
 
     id=bscnt.find(id="searchResultBox")
-    for i in id.find_all('div',style="width:650px; float:left;"):
+    for i in bscnt.find_all('div',{'class':'resItemBox exactMatch'}):
         for ii in i.find_all('a',href=True):
-            #if a%5==0 :
+            
             if ii['href'].startswith("book"):
                 stringLink = "http://m.bookfi.net/" + ii["href"]
                 #print(stringLink)
                 bookLink.append(stringLink)
-            a=a+1
+          
 
-    for j in bscnt.find_all('h3'):
-        #print(j.text)
-        bookTitle.append(j.text)
+    for j in bscnt.find_all('div',{'class':'resItemBox exactMatch'}):
+        for k in j.find_all('h3'):
+            bookTitle.append(j.text)
+
+    for j in bscnt.find_all('div',{'class':'resItemBox exactMatch'}): 
+        for k in j.find_all('a',target="_blank",href=True):
+            if k['href'].startswith("http://book"):
+                bookDownload.append(k['href'])
+            
+    
+    for j in bscnt.find_all('div',{'class':'resItemBox exactMatch'}):
+        if not j.find_all('span',itemprop='inLanguage'):
+            lang="NA"
+            
+        else:
+            for k in j.find_all('span',itemprop='inLanguage'):
+                lang=k.text
+        bookLanguage.append(lang)
+   
+                
         
-    for k in bscnt.find_all('a',target="_blank",href=True):
-        if k['href'].startswith("http://book"):
-            bookDownload.append(k['href'])
 
-    for l in bscnt.find_all('span',itemprop='inLanguage'):
-        #print(l.text)
-        bookLanguage.append(l.text)
-
-    for m in bscnt.find_all('a',itemprop="author"):
-        if m.text != "" and m.text != "img":
-            bookArthur.append(m.text)
-  
-    for c in range(90):
+    for j in bscnt.find_all('div',{'class':'resItemBox exactMatch'}):
+        if not j.find_all('a',itemprop="author"):
+            art="NA"
+            
+        else:
+            for k in j.find_all('a',itemprop="author"):
+                art=j.text
+                pass
+        bookArthur.append(art)
+        
+    
+    #print(bookTitle)
+    #print(bookLanguage)
+    
+    print(len(bookLink))
+    print(len(bookTitle))
+    print(len(bookArthur))
+    print(len(bookLanguage))
+    print(len(bookDownload))
+    
+    
+    for c in range(len(bookTitle)):
         books={}
         books['Title']=bookTitle[c]
         books['Arthur']=bookArthur[c]
@@ -189,6 +217,7 @@ def bookfi():
     bookFi={}
     bookFi["books"]=data
     return jsonify(bookFi)
+
 
 #Z-Library Popular
 @app.route('/zlib/popular')
