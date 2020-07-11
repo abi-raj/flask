@@ -242,6 +242,52 @@ def popularImages():
     data['data']=jsonArray
     return jsonify(data)
 
+#inDevelopment Tamil Yogi
+@app.route('/ty',methods=['GET'])
+def f():
+    query=str(request.args['q'])
+    if " " in query:
+        query = str(query).replace(" ","+")
+    url="http://tamilyogi.cool/?s="+query
+    cont=rq.get(url).content
+    bscnt=bs(cont,'html.parser')
+
+    imgL=[]
+    titL=[]
+    linkL=[]
+    tit=[]
+    for div in bscnt.find_all('div',id='archive'):
+        img=div.find_all('img')
+        for im in img:
+            imgL.append(str(im['src']))
+      
+        an=div.find_all('a')
+        prev=""
+        for anc in div.find_all('a'):
+            if prev!=anc['href']:
+                linkL.append(anc['href'])
+                prev=(anc['href'])
+        for anc in div.find_all('a'):
+            tit.append(anc.text)
+    while("" in tit):
+        tit.remove("")
+    for t in tit:
+        last=t.find(')')
+        titL.append((t[:(last+1)]))
+        
+        
+    lis=[]        
+    for i in range(len(imgL)):
+        movies={}
+        movies['title']=titL[i]
+        movies['image']=imgL[i]
+        movies['link']=linkL[i]
+        lis.append(movies)
+
+    mlist={}
+    mlist['movies']=lis
+    return jsonify(mlist)
+
 
 if __name__ == "__main__":
     app.run()
