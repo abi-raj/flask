@@ -242,8 +242,11 @@ def popularImages():
     data['data']=jsonArray
     return jsonify(data)
 
-#inDevelopment Tamil Yogi
-@app.route('/ty',methods=['GET'])
+
+
+#Tamil Yogi API
+@app.route('/tyS',methods=['GET'])
+
 def f():
     query=str(request.args['q'])
     if " " in query:
@@ -256,6 +259,8 @@ def f():
     titL=[]
     linkL=[]
     tit=[]
+    vidL=[]
+    
     for div in bscnt.find_all('div',id='archive'):
         img=div.find_all('img')
         for im in img:
@@ -276,17 +281,71 @@ def f():
         titL.append((t[:(last+1)]))
         
         
-    lis=[]        
+    vidL=video(linkL)
+    lis=[]
     for i in range(len(imgL)):
         movies={}
         movies['title']=titL[i]
         movies['image']=imgL[i]
-        movies['link']=linkL[i]
+        #movies['link']=linkL[i]
+        movies['video']=vidL[i]
+        
         lis.append(movies)
 
     mlist={}
     mlist['movies']=lis
     return jsonify(mlist)
+
+def video(link):
+    mlis=[]
+    for lin in link:
+        
+        url=lin
+        headers_mobile = { 'User-Agent' : 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B137 Safari/601.1'}
+        cont=rq.get(url,headers=headers_mobile).content
+        bscnt=bs(cont,'html.parser')
+        ifr=bscnt.find_all('iframe')[2]
+        mlis.append(ifr['src'])
+    #print(ifr['src'])
+    #vid={}
+    #vid['link']=(ifr['src'])
+    #print(mlis)
+    return mlis
+
+@app.route('/tyD',methods=['GET'])
+def download():
+    url=str(request.args['q'])
+    if url.startswith('http://vidorg.net/'):
+        ca=rq.get(url).content
+        cc=bs(ca,'html.parser')
+        c = cc.find_all('script')[7]
+        
+        cha=(str(c)[91:700])
+
+        cha="".join(cha.split())
+    
+
+        fi=cha.find('{')
+        li=cha.rfind(']')
+
+
+        var=cha[fi:(li+1)].split('"')
+
+        lis1=[a for a in var if a.endswith('.mp4')]
+        lis2=[a for a in var if a.endswith('p') and len(a)<5]
+    
+        formT = {lis2[i]: lis1[i] for i in range(len(lis1))}
+        
+        
+    else:
+        formT={}
+        formT['noVid']="No Links"
+            
+   
+    #print(form)
+    return jsonify(formT)
+
+
 
 
 if __name__ == "__main__":
