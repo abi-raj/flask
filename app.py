@@ -304,7 +304,7 @@ def video(link):
         headers_mobile = { 'User-Agent' : 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B137 Safari/601.1'}
         cont=rq.get(url,headers=headers_mobile).content
         bscnt=bs(cont,'html.parser')
-        ifr=bscnt.find_all('iframe')[2]
+        ifr=bscnt.find_all('iframe')[1]
         mlis.append(ifr['src'])
     #print(ifr['src'])
     #vid={}
