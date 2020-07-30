@@ -316,7 +316,7 @@ def video(link):
 def download():
     url=str(request.args['q'])
     if url.startswith('http://vidorg.net/'):
-        headers_mobile = { 'User-Agent' : 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B137 Safari/601.1'}
+        headers_mobile = { 'User-Agent' : 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36'}
         ca=rq.get(url,headers=headers_mobile).content
         cc=bs(ca,'html.parser')
         c = cc.find_all('script')[7]
