@@ -342,9 +342,12 @@ def download():
         formT={}
         formT['noVid']="No Links"
             
-   
+    form=[]
+    form.append(formT)
+    forn={}
+    forn["link"]=form
     #print(form)
-    return jsonify(formT)
+    return jsonify(forn)
 
 
 
