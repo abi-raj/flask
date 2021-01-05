@@ -420,6 +420,6 @@ def movieimg():
     ii = "<html><body><img src=" + url + "></body></html>"
     # r = Response(ii)
     # r.headers["Content-Type"] = "image/jpeg"
-    return ii,{'Content-Type': 'image/jpeg'}
+    return ii
 if __name__ == "__main__":
     app.run()
