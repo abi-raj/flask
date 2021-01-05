@@ -359,6 +359,8 @@ def ytsEncode(url):
         url = url.replace('&', '%26')
     if '/' in url:
         url = url.replace('/', '%2F')
+    if ':' in url:
+        url = url.replace(':', '%3A')
 
     # print(url)
 
@@ -420,13 +422,14 @@ def lists():
     with_rt_ratings = 'true' if (with_rt_ratings is not None and with_rt_ratings == 'true') else 'false'
 
     url = "https://yts.mx/api/v2/list_movies.json?limit=" + (
-        limit) + "&page=" + page + "&minimum_rating=" + minimum_rating + "&query_term=" + query_term + "&quality=" + quality + "&genre=" + genre + "&sort_by=" + sort_by + "&order_by=" + order_by + "&with_rt_ratings" + with_rt_ratings
+        limit) + "&page=" + page + "&minimum_rating=" + minimum_rating + "&query_term=" + query_term + "&quality=" + quality + "&genre=" + genre + "&sort_by=" + sort_by + "&order_by=" + order_by + "&with_rt_ratings=" + with_rt_ratings
     
     url = baseUrl + str(ytsEncode(url))
     response = rq.request("GET", url)
     data = response.json()
 
     return data
+    
 @app.route("/yts/img")
 def movieimg():
 
