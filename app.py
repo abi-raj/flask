@@ -352,12 +352,23 @@ def download():
 
 #YTSwrapper
 
+def ytsEncode(url):
+    if '?' in url:
+        url = url.replace('?', '%3F')
+    if '&' in url:
+        url = url.replace('&', '%26')
+    if '/' in url:
+        url = url.replace('/', '%2F')
+
+    # print(url)
+
+    return url
 @app.route("/yts/movie_suggestions")
 def suggestions():
     movie_id = request.args.get('movie_id')
 
     url = "https://yts.mx/api/v2/movie_suggestions.json?movie_id=" + str(movie_id)
-    url = baseUrl + str(url)
+    url = baseUrl + str(ytsEncode(url))
 
     response = rq.request("GET", url)
     data = response.json()
@@ -368,13 +379,16 @@ def suggestions():
 @app.route("/yts/movie_details")
 def detail():
     movie_id = request.args.get('movie_id')
-    # with_cast = request.args.get('with_cast')
-    # with_cast = 'true' if (with_cast is not None and with_cast == 'true') else 'false'
-    url = "https://yts.mx/api/v2/movie_details.json?movie_id=" + str(
-        movie_id)
-    # + "&with_cast=" + str(with_cast)
+    with_cast = request.args.get('with_cast')
+    with_images = request.args.get('with_images')
+    
+    with_cast = 'true' if (with_cast is not None and with_cast == 'true') else 'false'
+    with_images = 'true' if (with_images is not None and with_images == 'true') else 'false'
 
-    url = baseUrl + str(url)
+    url = "https://yts.mx/api/v2/movie_details.json?movie_id=" + movie_id + "&with_cast=" + with_cast + "&with_images=" + with_images
+    
+
+    url = baseUrl + str(ytsEncode(url))
     response = rq.request("GET", url)
     data = response.json()
 
@@ -391,6 +405,7 @@ def lists():
     genre = request.args.get('genre')
     sort_by = request.args.get('sort_by')
     order_by = request.args.get('order_by')
+    with_rt_ratings = request.args.get('with_rt_ratings')
 
     # check
 
@@ -404,19 +419,20 @@ def lists():
     order_by = 'desc' if order_by is None else order_by
 
     url = "https://yts.mx/api/v2/list_movies.json?limit=" + (
-        limit) + "&page=" + page + "&minimum_rating=" + minimum_rating + "&query_term=" + query_term + "&quality=" + quality + "&genre=" + genre + "&sort_by=" + sort_by + "&order_by=" + order_by
-    print(url)
-    url = baseUrl + str(url)
+        limit) + "&page=" + page + "&minimum_rating=" + minimum_rating + "&query_term=" + query_term + "&quality=" + quality + "&genre=" + genre + "&sort_by=" + sort_by + "&order_by=" + order_by + "&with_rt_ratings" + with_rt_ratings
+    
+    url = baseUrl + str(ytsEncode(url))
     response = rq.request("GET", url)
     data = response.json()
 
     return data
 @app.route("/yts/img")
 def movieimg():
+
     imgURL = request.args.get('imgURL')
-    print(imgURL)
-    url = baseUrl + imgURL
+    url = baseUrl + str(ytsEncode(imgURL))
     cont = rq.get(url).content
     return cont,{"Content-Type":"image/jpeg"}
+
 if __name__ == "__main__":
     app.run()
