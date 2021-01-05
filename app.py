@@ -411,7 +411,15 @@ def lists():
     data = response.json()
 
     return data
-
-
+@app.route("/yts/img")
+def movieimg():
+    imgURL = request.args.get('imgURL')
+    print(imgURL)
+    url = baseUrl + imgURL
+    # response = rq.request("GET", url)
+    ii = "<html><body><img src=" + url + "></body></html>"
+    # r = Response(ii)
+    # r.headers["Content-Type"] = "image/jpeg"
+    return ii,{'Content-Type': 'image/jpeg'}
 if __name__ == "__main__":
     app.run()
