@@ -416,7 +416,7 @@ def movieimg():
     imgURL = request.args.get('imgURL')
     print(imgURL)
     url = baseUrl + imgURL
-    cont = req.get(url).content
+    cont = rq.get(url).content
     return cont,{"Content-Type":"image/jpeg"}
 if __name__ == "__main__":
     app.run()
