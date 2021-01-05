@@ -2,7 +2,7 @@ from flask import Flask,request,jsonify
 from bs4 import BeautifulSoup as bs
 import requests as rq
 app = Flask(__name__)
-
+baseUrl = "https://www.unblockweb.uno/?cdURL="
 #LIBGEN
 @app.route('/api',methods=['GET'])
 def libgen():
@@ -350,6 +350,67 @@ def download():
     return jsonify(forn)
 
 
+#YTSwrapper
+
+@app.route("/yts/movie_suggestions")
+def suggestions():
+    movie_id = request.args.get('movie_id')
+
+    url = "https://yts.mx/api/v2/movie_suggestions.json?movie_id=" + str(movie_id)
+    url = baseUrl + str(url)
+
+    response = rq.request("GET", url)
+    data = response.json()
+
+    return data
+
+
+@app.route("/yts/movie_details")
+def detail():
+    movie_id = request.args.get('movie_id')
+    # with_cast = request.args.get('with_cast')
+    # with_cast = 'true' if (with_cast is not None and with_cast == 'true') else 'false'
+    url = "https://yts.mx/api/v2/movie_details.json?movie_id=" + str(
+        movie_id)
+    # + "&with_cast=" + str(with_cast)
+
+    url = baseUrl + str(url)
+    response = rq.request("GET", url)
+    data = response.json()
+
+    return data
+
+
+@app.route("/yts/list_movies")
+def lists():
+    limit = request.args.get('limit')
+    page = request.args.get('page')
+    quality = request.args.get('quality')
+    minimum_rating = request.args.get('minimum_rating')
+    query_term = request.args.get('query_term')
+    genre = request.args.get('genre')
+    sort_by = request.args.get('sort_by')
+    order_by = request.args.get('order_by')
+
+    # check
+
+    limit = '20' if limit is None else limit
+    page = '1' if page is None else page
+    quality = 'all' if quality is None else quality
+    minimum_rating = '0' if minimum_rating is None else minimum_rating
+    query_term = '0' if query_term is None else query_term
+    genre = 'all' if genre is None else genre
+    sort_by = 'date_added' if sort_by is None else sort_by
+    order_by = 'desc' if order_by is None else order_by
+
+    url = "https://yts.mx/api/v2/list_movies.json?limit=" + (
+        limit) + "&page=" + page + "&minimum_rating=" + minimum_rating + "&query_term=" + query_term + "&quality=" + quality + "&genre=" + genre + "&sort_by=" + sort_by + "&order_by=" + order_by
+    print(url)
+    url = baseUrl + str(url)
+    response = rq.request("GET", url)
+    data = response.json()
+
+    return data
 
 
 if __name__ == "__main__":
