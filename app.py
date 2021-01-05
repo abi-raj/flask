@@ -361,6 +361,8 @@ def ytsEncode(url):
         url = url.replace('/', '%2F')
     if ':' in url:
         url = url.replace(':', '%3A')
+    if '=' in url:
+        url = url.replace('=', '%3D')
 
     # print(url)
 
@@ -429,7 +431,7 @@ def lists():
     data = response.json()
 
     return data
-    
+
 @app.route("/yts/img")
 def movieimg():
 
