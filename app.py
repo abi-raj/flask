@@ -381,7 +381,7 @@ def detail():
     movie_id = request.args.get('movie_id')
     with_cast = request.args.get('with_cast')
     with_images = request.args.get('with_images')
-    
+
     with_cast = 'true' if (with_cast is not None and with_cast == 'true') else 'false'
     with_images = 'true' if (with_images is not None and with_images == 'true') else 'false'
 
@@ -417,6 +417,7 @@ def lists():
     genre = 'all' if genre is None else genre
     sort_by = 'date_added' if sort_by is None else sort_by
     order_by = 'desc' if order_by is None else order_by
+    with_rt_ratings = 'true' if (with_rt_ratings is not None and with_rt_ratings == 'true') else 'false'
 
     url = "https://yts.mx/api/v2/list_movies.json?limit=" + (
         limit) + "&page=" + page + "&minimum_rating=" + minimum_rating + "&query_term=" + query_term + "&quality=" + quality + "&genre=" + genre + "&sort_by=" + sort_by + "&order_by=" + order_by + "&with_rt_ratings" + with_rt_ratings
