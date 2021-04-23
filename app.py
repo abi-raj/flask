@@ -1,6 +1,9 @@
 from flask import Flask,request,jsonify,Response
 from bs4 import BeautifulSoup as bs
 import requests as rq
+import numpy as np
+import cv2
+import os
 app = Flask(__name__)
 baseUrl = "https://www.unblockweb.uno/?cdURL="
 #LIBGEN
@@ -439,6 +442,49 @@ def movieimg():
     url = baseUrl + str(ytsEncode(imgURL))
     cont = rq.get(url).content
     return cont,{"Content-Type":"image/jpeg"}
+
+
+
+def image_from_buffer(file_buffer):
+    '''
+    If we don't save the file locally and just want to open
+    a POST'd file. This is what we use.
+    '''
+    bytes_as_np_array = np.frombuffer(file_buffer.read(), dtype=np.uint8)
+    flag = 1
+    # flag = 1 == cv2.IMREAD_COLOR
+    # https://docs.opencv.org/4.2.0/d4/da8/group__imgcodecs.html
+    frame = cv2.imdecode(bytes_as_np_array, flag)
+    return frame
+
+def get_face_cascade(cascade='haarcascade_frontalface_default.xml'):
+    #print(os.path.join(cv2.data.haarcascades, cascade))
+    return os.path.join(cv2.data.haarcascades, cascade)
+
+def faces_from_frame(frame, save=True, destination=None):
+    '''
+    This is will extract all faces found in an image
+    And save the faces (just the face) as a unique file
+    in our destination folder.
+    '''
+    gray  = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    cascade_xml = get_face_cascade()
+    cascade = cv2.CascadeClassifier(cascade_xml)
+    faces = cascade.detectMultiScale(gray, scaleFactor=1.5, minNeighbors=4)
+    return len(faces)
+
+@app.route('/api/face', methods=['POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            return {"detail": "No file found"}, 400
+        file = request.files['file']
+        if file.filename == '':
+            return {"detail": "Invalid file or filename missing"}, 400
+        frame = image_from_buffer(file)
+        l=faces_from_frame(frame)
+        return {"faces":l}
 
 if __name__ == "__main__":
     app.run()
