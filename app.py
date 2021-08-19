@@ -5,6 +5,9 @@ import requests as rq
 app = Flask(__name__)
 baseUrl = "https://www.unblockweb.uno/?cdURL="
 #LIBGEN
+@app.route('/',methods=['GET'])
+def homeNew():
+    return '<h1>Lord take me home</h1>'
 @app.route('/api',methods=['GET'])
 def libgen():
     url="http://gen.lib.rus.ec/"
